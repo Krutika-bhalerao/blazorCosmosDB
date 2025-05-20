@@ -1,14 +1,29 @@
 ﻿using Azure;
 using Microsoft.Azure.Cosmos;
+using System.Configuration;
 
 namespace blazorCosmosDB.Data
 {
     public class EngineerService : IEngineerService
     {
-        private readonly string CosmosDbConnectionString = "AccountEndpoint=https://azure-cosmos-db-1.documents.azure.com:443/;AccountKey=typ7VYxJRBWPQplxyyNv3VIZVpgfLffhqlApSHdLqzfhBSOo0Rrx45EpiON7ebkZMdSEk7VGGC35ACDbMRVrbQ==;";
-        private readonly string CosmosDbName = "Contractors";
-        private readonly string CosmosDbContainerName = "Engineers";
 
+        private readonly string _connectionString;
+        private readonly string CosmosDbConnectionString;
+        private readonly string CosmosDbName;
+        private readonly string CosmosDbContainerName;
+
+
+        public EngineerService(IConfiguration configuration)
+        {
+            _connectionString = configuration["ConnectionString"];
+
+            // Assign the rest here, using the available configuration or constants
+            CosmosDbConnectionString = _connectionString;
+            CosmosDbName = "Contractors";
+            CosmosDbContainerName = "Engineers";
+
+        }
+        
         private Container GetContainerClient()
         {
             var cosmosDbClient = new CosmosClient(CosmosDbConnectionString);
